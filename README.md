@@ -67,11 +67,11 @@ caios/
 ├── src/                 # React frontend
 │   ├── app/             # Layout, rotas
 │   ├── components/      # Sidebar, cards, terminal, UI
-│   ├── pages/           # Telas do MVP
+│   ├── pages/           # Telas (Dashboard, Tools, Projects, Prompts, Lab, Notes, Terminal, Settings + extras)
 │   ├── services/        # CRUD (localStorage → SQLite)
-│   ├── types/           # Tool, Project, Prompt, Experiment
-│   └── lib/             # db, mock-data, utils
-├── src-tauri/           # Backend Rust (shell, SQLite, filesystem)
+│   ├── types/           # Tool, Project, Prompt, Experiment...
+│   └── lib/             # db, mock-data, utils, tauri-bridge
+├── src-tauri/           # Backend Rust (shell, SQLite, filesystem, PTY, opener, dialog)
 ├── caios-data/          # Notas, logs, projetos, scripts auxiliares
 ├── obsidian-vault/      # Vault Obsidian (Brain, Lector, Projetos, Prompts…)
 └── scripts/             # PTY server, Explorer, Movidesk, Open Design
@@ -83,11 +83,12 @@ O vault local fica em `C:/Users/gcaio/OneDrive/Documentos/caio`. Uma cópia vers
 
 ## Próximas fases
 
-1. **Fase 2 — Tools**: abrir web/terminal/folder via Tauri Shell
-2. **Fase 3 — Projects**: terminal na pasta do projeto
-3. **Fase 4 — Prompts**: copiar e abrir com ferramenta
-4. **Fase 5 — Lab**: logs persistentes
-5. **Fase 6 — Notes**: Markdown em `caios-data/notes`
+- **Fase 4 — Prompts**: copiar, editar e abrir com ferramenta recomendada
+- **Fase 5 — Lab**: persistir experimentos + histórico completo
+- **Fase 6 — Notes**: Markdown editing + arquivos reais em `caios-data/notes`
+- **Expansão**: Integração mais profunda com Hermes, Explorer, Live Call e Open Design
+
+**Status atual**: Fases 1, 2 e 3 implementadas + muitas extensões (Hermes, Brain, Mission Control, Lector etc).
 
 ## Licença
 

@@ -311,17 +311,13 @@ export const knowledgeSyncService = {
         if (e) await writeEntity('Experimentos', e.title, e.id, experimentMd(e))
         else await this.removeEntity('Experimentos', id)
       }
-      if (type === 'log' if (type === 'log' && id) {if (type === 'log' && id) { id) {
+      if (type === 'log' && id) {
         const l = logsService.list().find((x) => x.id === id)
         if (l) await writeEntity('Logs', `${l.type} ${l.createdAt.slice(0, 10)}`, l.id, logMd(l))
       }
-      if (type === 'lector-execution' if (type === 'log' && id) {if (type === 'log' && id) { id) {
+      if (type === 'lector-execution' && id) {
         // Lector executions are primarily saved directly via lector.service
         console.log('[knowledgeSync] Lector execution sync requested', id)
-      }
-      await this.syncIndex()
-        const l = logsService.list().find((x) => x.id === id)
-        if (l) await writeEntity('Logs', `${l.type} ${l.createdAt.slice(0, 10)}`, l.id, logMd(l))
       }
       await this.syncIndex()
     })
@@ -371,8 +367,12 @@ export const knowledgeSyncService = {
 
   migrateVaultPath(): void {
     const tool = toolsService.getById('tool-obsidian')
-    if (tool?.path?.includes('Caio/Documents/ObsidianVault')) {
-      vaultService.setVaultPath('C:/Users/gcaio/OneDrive/Documentos/caio')
+    if (!tool) return
+    const p = (tool.path || '').toLowerCase().replace(/\\/g, '/')
+    const target = 'C:/Users/lecto/OneDrive/Documentos/Lector BRAIN'
+    if (!p || p !== target.toLowerCase()) {
+      // force to the correct vault for this machine
+      vaultService.setVaultPath(target)
     }
   },
 }

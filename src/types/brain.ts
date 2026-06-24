@@ -60,4 +60,5 @@ export type SyncEntityType =
   | 'prompt'
   | 'experiment'
   | 'log'
+  | 'lector-execution'
   | 'index'

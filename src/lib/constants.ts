@@ -24,7 +24,7 @@ export const STORAGE_KEYS = {
   liveCallHermesSession: 'caios_live_call_hermes_session',
 } as const
 
-export const DEFAULT_OBSIDIAN_VAULT = 'C:/Users/gcaio/OneDrive/Documentos/caio'
+export const DEFAULT_OBSIDIAN_VAULT = 'C:/Users/lecto/OneDrive/Documentos/Lector BRAIN'
 export const CAIOS_VAULT_FOLDER = 'CaiOS'
 
 export const CLAUDE_CODE_TOOL_ID = 'tool-claude'
@@ -37,7 +37,7 @@ export const OBSIDIAN_TOOL_ID = 'tool-obsidian'
 export const HERMES_DASHBOARD_URL = 'http://localhost:9119'
 export const HERMES_EXPLORER_PROFILE = 'explorer'
 export const HERMES_EXPLORER_DASHBOARD_URL = `http://127.0.0.1:9119/?profile=${HERMES_EXPLORER_PROFILE}`
-export const HERMES_HOME = 'C:/Users/gcaio/.hermes'
+export const HERMES_HOME = 'C:/Users/lecto/.hermes'
 export const EXPLORER_SKILL_NAME = 'caios-explorer'
 export const EXPLORER_OBSIDIAN_FOLDER = 'CaiOS/Explorer'
 export const LIVE_CALL_OBSIDIAN_FOLDER = 'CaiOS/LiveCall'

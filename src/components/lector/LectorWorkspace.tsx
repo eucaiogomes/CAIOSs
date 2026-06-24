@@ -24,7 +24,15 @@ export function LectorWorkspace({ agent, onBack, onComplete }: LectorWorkspacePr
     reset,
   } = useLectorAgent()
 
-  const [prompt, setPrompt] = useState(agent.promptTemplate)
+  const [prompt, setPrompt] = useState(agent.promptTemplate.replace('{quantidade}', '5'))
+  const [quantity, setQuantity] = useState(5)
+
+  // Atualiza prompt quando quantidade muda (apenas para agente de cadastro)
+  useEffect(() => {
+    if (agent.id === 'cadastro-usuarios') {
+      setPrompt(agent.promptTemplate.replace('{quantidade}', String(quantity)))
+    }
+  }, [quantity, agent])
 
   useEffect(() => {
     if (execution && execution.status === "success" && onComplete) {
@@ -63,7 +71,7 @@ export function LectorWorkspace({ agent, onBack, onComplete }: LectorWorkspacePr
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={onBack}>
+          <Button variant="secondary" size="sm" onClick={onBack}>
             Voltar para lista
           </Button>
           <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5">
@@ -78,6 +86,20 @@ export function LectorWorkspace({ agent, onBack, onComplete }: LectorWorkspacePr
           <CardTitle className="text-base">Descreva o que você precisa</CardTitle>
         </CardHeader>
         <div className="px-5 pb-5 space-y-3">
+          {agent.id === 'cadastro-usuarios' && (
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-text-secondary">Quantidade de usuários:</label>
+              <input
+                type="number"
+                min={1}
+                max={50}
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="w-20 rounded border border-border bg-bg-panel px-2 py-1 text-sm text-text-primary"
+              />
+            </div>
+          )}
+
           <Textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -98,7 +120,7 @@ export function LectorWorkspace({ agent, onBack, onComplete }: LectorWorkspacePr
 
             {currentExecution && (
               <Button 
-                variant="outline" 
+                variant="secondary" 
                 onClick={handleSave}
                 disabled={isRunning}
                 className="gap-2"

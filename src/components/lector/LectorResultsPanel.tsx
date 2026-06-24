@@ -36,7 +36,7 @@ export function LectorResultsPanel({
           <CardTitle className="text-sm">Resultados Estruturados</CardTitle>
           <Button 
             size="sm" 
-            variant="outline" 
+            variant="secondary" 
             onClick={onSaveToObsidian}
             disabled={isSaving}
             className="gap-1.5"
@@ -94,14 +94,15 @@ export function LectorResultsPanel({
           </div>
         )}
 
-         {obsidianPath {obsidianPath && ({obsidianPath && ( (
-          <div className="pt-2 border-t text-xs text-emerald">
-            ✅ Salvo no Obsidian: <span className="font-mono">{obsidianPath.split('/').pop()}</span>
-          </div>
-        )}
-          <div className="pt-2 border-t text-xs text-text-muted">
-            Salvo em: <span className="font-mono">{obsidianPath}</span>
-          </div>
+        {obsidianPath && (
+          <>
+            <div className="pt-2 border-t text-xs text-emerald">
+              ✅ Salvo no Obsidian: <span className="font-mono">{obsidianPath.split('/').pop()}</span>
+            </div>
+            <div className="pt-2 border-t text-xs text-text-muted">
+              Salvo em: <span className="font-mono">{obsidianPath}</span>
+            </div>
+          </>
         )}
       </div>
     </Card>

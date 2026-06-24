@@ -3,12 +3,11 @@ import { HermesGateway } from '@/lib/hermes-gateway'
 import {
   fetchHermesSessionToken,
   getHermesWsUrl,
-  ensureDashboard,
 } from '@/lib/hermes-api'
-import { generateId, nowISO } from '@/lib/utils'
+import { ensureDashboard } from '@/services/hermes-dashboard.service'
 import { lectorService } from '@/services/lector.service'
 import { knowledgeSyncService } from '@/services/knowledge-sync.service'
-import type { LectorAgent, LectorExecution, LectorLog, LectorResult } from '@/types/lector'
+import type { LectorAgent, LectorExecution, LectorLog } from '@/types/lector'
 
 let persistentLectorGateway: HermesGateway | null = null
 
@@ -26,7 +25,6 @@ export function useLectorAgent() {
   const [error, setError] = useState<string | null>(null)
 
   const gatewayRef = useRef<HermesGateway | null>(null)
-  const sessionIdRef = useRef<string | null>(null)
   const mountedRef = useRef(true)
 
   // Setup gateway and listeners
@@ -131,8 +129,8 @@ export function useLectorAgent() {
 
       if (gw.state !== 'open') {
         const token = await fetchHermesSessionToken()
-        const wsUrl = getHermesWsUrl()
-        await gw.connect(`${wsUrl}?token=${token}`)
+        const wsUrl = getHermesWsUrl(token)
+        await gw.connect(wsUrl)
       }
 
       // Use the request method like Explorer does

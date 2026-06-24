@@ -13,7 +13,7 @@ import {
 import { generateId } from '@/lib/utils'
 import { liveCallService } from '@/services/live-call.service'
 import { ensureDashboard } from '@/services/hermes-dashboard.service'
-import type { LiveCallChatEntry, LiveCallSession, LiveCallSuggestion } from '@/types/live-call'
+import type { LiveCallChatEntry, LiveCallSuggestion } from '@/types/live-call'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 const SESSION_OPTS = { close_on_disconnect: false, title: 'Live Call Coach' } as const
@@ -54,7 +54,6 @@ export function useLiveCallAgent(sessionId: string | null) {
   const [lastReply, setLastReply] = useState('')
 
   const gwRef = useRef<HermesGateway | null>(null)
-  const sessionIdRef = useRef<string | null>(null)
   const hermesSessionRef = useRef<string | null>(null)
   const streamIdRef = useRef<string | null>(null)
   const busyRef = useRef(false)

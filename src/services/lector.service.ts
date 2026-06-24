@@ -113,6 +113,16 @@ export const LECTOR_AGENTS: LectorAgent[] = [
     promptTemplate: 'Quero [AÇÃO] sobre [TEMA]. Use os skills necessários do Lector e salve tudo na base.',
     color: 'bg-primary/10 text-primary',
   },
+  {
+    id: 'cadastro-usuarios',
+    name: 'Criador de Usuários em Massa',
+    description: 'Cadastra usuários teste no Lector Live (conta 9) com CPF válido, senha automática e perfil padrão. Apenas defina a quantidade.',
+    icon: 'UserPlus',
+    skill: 'lector-user-creator',
+    obsidianFolder: 'Lector/Usuarios',
+    promptTemplate: 'Crie {quantidade} usuários teste no Lector usando a skill `lector-user-creator`. AccountId=9, perfil padrão Administrador, senha = primeiros 5 dígitos do CPF. Para cada usuário criado, salve um registro no Obsidian em CaiOS/Lector/Usuarios/ com username, CPF, senha e ID retornado.',
+    color: 'bg-orange/10 text-orange',
+  },
 ]
 
 // ============================================
@@ -130,6 +140,8 @@ function createEmptyExecution(agent: LectorAgent, prompt: string): LectorExecuti
     logs: [],
   }
 }
+
+export const lectorService = {
   getAgents(): LectorAgent[] {
     return LECTOR_AGENTS
   },

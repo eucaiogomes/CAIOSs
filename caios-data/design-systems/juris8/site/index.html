@@ -30,7 +30,7 @@
       <a href="#faq" class="nav-link">FAQ</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="nav-ghost">Entrar</a>
+      <a href="#" class="nav-ghost js-specialist-cta">Entrar</a>
       <a href="#" class="nav-cta js-specialist-cta">
         <i data-lucide="arrow-right" width="14" height="14" stroke-width="1.7"></i>
         Falar com um especialista
@@ -265,17 +265,8 @@
       <p class="sec-lede">Autorize o acesso, selecione os CNPJs e acompanhe todas as novas comunicações em um só lugar.</p>
     </div>
 
-    <div class="mockup9-embed-wrap reveal d1" id="mockup9-embed-wrap">
-      <iframe
-        id="mockup9-embed-frame"
-        src="mockup9-embed/dist/index.html"
-        title="Demonstração animada da configuração do certificado digital e dos CNPJs"
-        loading="lazy"
-        scrolling="no"
-      ></iframe>
-    </div>
-
-    <div class="hiw reveal d1" id="hiw-legacy" hidden aria-hidden="true">
+    <!-- Demo animada do fluxo completo (3 passos) restaurada -->
+    <div class="hiw reveal d1" id="hiw">
       <div class="hiw-steps" role="tablist" aria-label="Etapas do monitoramento DET">
 
         <button class="hiw-step active" role="tab" data-step="0">
@@ -353,7 +344,7 @@
       </div>
     </div>
 
-    <div class="det-section-close reveal d3" hidden aria-hidden="true">
+    <div class="det-section-close reveal d3">
       Sem depender da memória de alguém. Sem perder tempo conferindo manualmente. Sem descobrir tarde demais.
     </div>
   </div>
@@ -463,14 +454,14 @@
         <span class="revenue-step-number">01</span>
         <h3>Apresente e venda</h3>
         <p>Montamos uma página web personalizada para o seu escritório. Você apresenta ao cliente e envia a proposta. O cliente paga e você é comissionado.</p>
-        <button class="resource-btn" type="button" data-resource="proposal"><i data-lucide="download" width="15" height="15"></i>Modelo de proposta</button>
+        <button class="resource-btn js-specialist-cta" type="button" data-resource="proposal"><i data-lucide="download" width="15" height="15"></i>Modelo de proposta</button>
       </article>
 
       <article class="revenue-step reveal d2">
         <span class="revenue-step-number">02</span>
         <h3>Obtenha acesso</h3>
         <p>Obtenha uma procuração específica do cliente. O processo é simples e leva cerca de cinco minutos.</p>
-        <button class="resource-btn" type="button" data-resource="procuracao"><i data-lucide="download" width="15" height="15"></i>Passo a passo da procuração</button>
+        <button class="resource-btn js-specialist-cta" type="button" data-resource="procuracao"><i data-lucide="download" width="15" height="15"></i>Passo a passo da procuração</button>
       </article>
 
       <article class="revenue-step reveal d3">
@@ -517,10 +508,12 @@
 
       <div class="calculator-result" aria-live="polite">
         <div><span>Receita bruta anual</span><strong id="calc-gross">R$ 42.000</strong></div>
-        <div><span>Retenção Juris8</span><strong class="negative" id="calc-retention">− R$ 12.000</strong></div>
-        <div><span>Subtotal</span><strong id="calc-subtotal">R$ 30.000</strong></div>
+        <div><span>Custo Juris8 (R$ 100 / CNPJ / mês)</span><strong class="negative" id="calc-retention">− R$ 12.000</strong></div>
+        <div><span>Base de cálculo</span><strong id="calc-subtotal">R$ 30.000</strong></div>
         <div><span>Impostos (15%)</span><strong class="negative" id="calc-taxes">− R$ 4.500</strong></div>
-        <div class="calculator-final"><span>Comissão líquida por ano</span><strong id="calc-commission">R$ 5.100</strong></div>
+        <div><span>Base líquida de impostos</span><strong id="calc-netoftaxes">R$ 25.500</strong></div>
+        <div><span>20% de retenção Juris8</span><strong class="negative" id="calc-retention20">− R$ 5.100</strong></div>
+        <div class="calculator-final"><span>Comissão líquida anual para o advogado (80%)</span><strong id="calc-commission">R$ 20.400</strong></div>
       </div>
     </div>
   </div>
@@ -672,11 +665,7 @@
       <p class="cta-final-p">Empresas precisam acompanhar o Domicílio Eletrônico Trabalhista. A maioria ainda não tem processo para isso. Seu escritório pode ser quem resolve.</p>
       <p class="cta-final-p strong">Seu escritório não precisa esperar o problema chegar. Ele pode chegar primeiro.</p>
       <div class="btn-group">
-        <a href="#cta" class="btn primary lg">
-          <i data-lucide="play-circle" width="14" height="14" stroke-width="1.7"></i>
-          Quero ver a demonstração
-        </a>
-        <a href="#" class="btn secondary lg js-specialist-cta">
+        <a href="#" class="btn primary lg js-specialist-cta">
           Falar com um especialista
           <i data-lucide="arrow-right" width="14" height="14" stroke-width="1.7"></i>
         </a>
@@ -941,7 +930,7 @@ if (hiw) {
   hiwObserver.observe(hiw);
 }
 
-// ganhos: duplica os cards para o loop infinito ser contínuo
+// ganhos: duplica os cards e roda um marquee infinito pra esquerda via rAF
 const gainsTrack = document.getElementById('gains-track');
 if (gainsTrack) {
   Array.from(gainsTrack.children).forEach((card) => {
@@ -949,6 +938,32 @@ if (gainsTrack) {
     clone.setAttribute('aria-hidden', 'true');
     gainsTrack.appendChild(clone);
   });
+
+  const gainsLoop = gainsTrack.closest('.gains-loop');
+  let offset = 0;
+  let paused = false;
+  let last = null;
+  const SPEED = 64; // px por segundo, deslizando para a esquerda
+
+  if (gainsLoop) {
+    gainsLoop.addEventListener('mouseenter', () => { paused = true; });
+    gainsLoop.addEventListener('mouseleave', () => { paused = false; });
+  }
+
+  function step(now) {
+    if (last == null) last = now;
+    const dt = (now - last) / 1000;
+    last = now;
+    if (!paused) {
+      offset += SPEED * dt;
+      // metade da faixa = um conjunto completo (o resto são clones); reinicia sem emenda
+      const half = gainsTrack.scrollWidth / 2;
+      if (half > 0 && offset >= half) offset -= half;
+      gainsTrack.style.transform = 'translateX(' + (-offset) + 'px)';
+    }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
 }
 
 // spotlight: brilho que segue o mouse nos cards
@@ -979,7 +994,9 @@ if (calculator) {
     const retention = cnpjs * 100 * 12;
     const subtotal = gross - retention;
     const taxes = subtotal * 0.15;
-    const commission = (subtotal - taxes) * 0.20;
+    const netOfTaxes = subtotal - taxes;
+    const retention20 = netOfTaxes * 0.20;
+    const commission = netOfTaxes * 0.80;
 
     document.getElementById('calc-cnpjs-value').textContent = cnpjs;
     document.getElementById('calc-price-value').textContent = money.format(price);
@@ -987,6 +1004,8 @@ if (calculator) {
     document.getElementById('calc-retention').textContent = '− ' + money.format(retention);
     document.getElementById('calc-subtotal').textContent = money.format(subtotal);
     document.getElementById('calc-taxes').textContent = '− ' + money.format(taxes);
+    document.getElementById('calc-netoftaxes').textContent = money.format(netOfTaxes);
+    document.getElementById('calc-retention20').textContent = '− ' + money.format(retention20);
     document.getElementById('calc-commission').textContent = money.format(commission);
   }
 
@@ -1230,7 +1249,68 @@ document.querySelectorAll('.faq-item').forEach((item) => {
   });
   if (window.lucide) lucide.createIcons();
 })();
+
+// ============================================
+// BALÃOZINHO WHATSAPP
+// ============================================
+(function initWaFab() {
+  const fab = document.querySelector('[data-wa]');
+  if (!fab) return;
+  const bubble = fab.querySelector('.wa-bubble');
+  const closeBtn = fab.querySelector('.wa-bubble-close');
+  const link = fab.querySelector('.wa-btn');
+  const KEY = 'juris8_wa_bubble_dismissed';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // revela o botão pouco depois do load
+  setTimeout(() => fab.classList.add('in'), 500);
+
+  // estado de dispensa do balão
+  let dismissed = false;
+  try { dismissed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+
+  // balão proativo (se ainda não dispensado)
+  if (!dismissed) {
+    setTimeout(() => fab.classList.add('show-bubble'), reduce ? 900 : 3200);
+  }
+
+  // no desktop, hover sobre o conjunto mostra o balão
+  if (window.matchMedia('(hover: hover)').matches) {
+    fab.addEventListener('mouseenter', () => fab.classList.add('show-bubble'));
+    fab.addEventListener('mouseleave', () => { if (dismissed) fab.classList.remove('show-bubble'); });
+  }
+
+  // clicar no balão abre o WhatsApp
+  bubble.addEventListener('click', (e) => {
+    if (e.target.closest('.wa-bubble-close')) return;
+    window.open(link.href, '_blank', 'noopener');
+  });
+
+  // fechar o balão (lembra a escolha)
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    fab.classList.remove('show-bubble');
+    dismissed = true;
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+  });
+
+  if (window.lucide) lucide.createIcons();
+})();
 </script>
+
+<!-- Balãozinho WhatsApp — troque 55XXXXXXXXXXX pelo número real (DDI+DDD+número) -->
+<div class="wa-fab" data-wa>
+  <div class="wa-bubble" role="dialog" aria-label="Atendimento no WhatsApp">
+    <button class="wa-bubble-close" type="button" aria-label="Fechar"><i data-lucide="x"></i></button>
+    <p class="wa-bubble-title">Dúvidas sobre o DET?</p>
+    <p class="wa-bubble-text">Fale com um especialista agora — resposta em minutos.</p>
+    <span class="wa-bubble-cta">Iniciar conversa <i data-lucide="arrow-right"></i></span>
+  </div>
+  <a class="wa-btn" href="https://wa.me/55XXXXXXXXXXX?text=Ol%C3%A1!%20Tenho%20interesse%20no%20monitoramento%20do%20DET%20para%20meus%20clientes." target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+    <span class="wa-btn-ring" aria-hidden="true"></span>
+    <svg class="wa-btn-icon" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.13 1.64 5.83L4.5 28l7.27-2.06a11.03 11.03 0 0 0 4.27.85h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.1 9.1 0 0 1-4.64-1.27l-.33-.2-3.86 1.09 1.1-3.76-.22-.35a9.11 9.11 0 1 1 8.96 4.49zm5.1-6.83c-.28-.14-1.65-.81-1.9-.9-.26-.1-.45-.14-.63.14-.19.28-.72.9-.88 1.08-.16.19-.32.21-.6.07-.28-.14-1.18-.43-2.25-1.39-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.63-1.51-.86-2.07-.23-.55-.46-.47-.63-.48l-.54-.01c-.19 0-.49.07-.74.35-.26.28-.97.95-.97 2.32s1 2.69 1.14 2.88c.14.19 1.96 2.99 4.75 4.19.66.29 1.18.46 1.58.59.66.21 1.27.18 1.74.11.53-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.26-.19-.54-.33z"/></svg>
+  </a>
+</div>
 
 </body>
 </html>

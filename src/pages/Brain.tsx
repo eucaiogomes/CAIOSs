@@ -202,9 +202,13 @@ export function BrainPage() {
               variant="ghost"
               size="sm"
               onClick={() => openPath(vaultService.getVaultPath())}
+              title="Abrir pasta do vault no explorador"
             >
               <ExternalLink className="h-3.5 w-3.5" />
             </Button>
+            <span className="text-[10px] text-text-muted ml-2 truncate max-w-[220px]" title={vaultService.getVaultPath()}>
+              {vaultService.getVaultPath()}
+            </span>
           </div>
         </header>
 

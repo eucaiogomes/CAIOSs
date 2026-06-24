@@ -40,7 +40,7 @@ export function getHermesHttpRoot(): string {
     : `${window.location.origin}/hermes-api`
 }
 
-export function getHermesHttpBase(profile?: string): string {
+export function getHermesHttpBase(_profile?: string): string {
   return getHermesHttpRoot()
 }
 

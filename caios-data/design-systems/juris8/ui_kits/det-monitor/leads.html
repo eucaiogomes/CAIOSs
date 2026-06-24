@@ -1,0 +1,578 @@
+<!-- @dsCard group="DET Monitor" viewport="1280x800" name="Caixa de Leads" subtitle="Triagem dos leads que chegam do formulário da landing page — agora integrado com Supabase real" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Juris8 — Caixa de Leads</title>
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  html, body { height: 100%; margin: 0; }
+  #root { height: 100vh; }
+  *::-webkit-scrollbar { width: 9px; height: 9px; }
+  *::-webkit-scrollbar-thumb { background: var(--hairline-strong); border-radius: 6px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  .chiprow { scrollbar-width: none; -ms-overflow-style: none; }
+  .chiprow::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body class="juris-ambient">
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo } = React;
+const { Badge, Button, Stat, Input } = window.Juris8DesignSystem_75d483;
+
+/* ---------- inline icons (SVG, no lucide — safe under frequent re-render) ---------- */
+const PATHS = {
+  search: ['M21 21l-4.3-4.3', 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z'],
+  whatsapp: ['M7.9 20.1A9 9 0 1 0 4 16.1L3 21l4.9-.9Z', 'M8.5 9.5c0 4 3 6.5 6 6.5.7 0 1.3-.6 1.3-1.3l-2-1-1 1c-1.2-.5-2-1.3-2.5-2.5l1-1-1-2c-.7 0-1.3.6-1.3 1.3Z'],
+  mail: ['M3 6.5h18v11H3z', 'm3 7 9 6 9-6'],
+  copy: ['M9 9h11v11H9z', 'M5 15H4V4h11v1'],
+  check: ['M20 6 9 17l-5-5'],
+  phone: ['M16.5 21A13.5 13.5 0 0 1 3 7.5 2 2 0 0 1 5 5.5h2.2a1 1 0 0 1 1 .8l.7 3a1 1 0 0 1-.3 1L7.2 11.8a11 11 0 0 0 5 5l1.5-1.4a1 1 0 0 1 1-.3l3 .7a1 1 0 0 1 .8 1V19a2 2 0 0 1-2 2Z'],
+  building: ['M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16', 'M15 9h4a1 1 0 0 1 1 1v11', 'M3 21h18', 'M7.5 7.5h.01', 'M7.5 11h.01', 'M11 7.5h.01', 'M11 11h.01', 'M7.5 14.5h4'],
+  chevR: ['m9 6 6 6-6 6'],
+  arrowR: ['M5 12h14', 'm12 5 7 7-7 7'],
+  inbox: ['M22 12h-6l-2 3h-4l-2-3H2', 'M5.5 5.5 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.5a2 2 0 0 0-1.8-1H7.3a2 2 0 0 0-1.8 1Z'],
+  bell: ['M10.3 21a2 2 0 0 0 3.4 0', 'M3.3 17a1 1 0 0 1-.74-1.67C3.9 14 5 12.5 5 8a7 7 0 0 1 14 0c0 4.5 1.1 6 2.4 7.33A1 1 0 0 1 20.7 17Z'],
+  user: ['M19 21a7 7 0 0 0-14 0', 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
+  clock: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'M12 7v5l3 2'],
+  source: ['M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z', 'M3.6 9h16.8', 'M3.6 15h16.8', 'M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z'],
+  cnpj: ['M3 21V8l9-5 9 5v13', 'M3 21h18', 'M9 21v-6h6v6'],
+  note: ['M4 4h16v12l-4 4H4z', 'M14 20v-4h4'],
+  shield: ['M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z', 'm9 12 2 2 4-4'],
+};
+function Icon({ n, s = 15, c = 'currentColor', sw = 1.9, style }) {
+  return (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth={sw}
+      strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0, ...style }}>
+      {(PATHS[n] || []).map((d, i) => <path key={i} d={d} />)}
+    </svg>
+  );
+}
+
+/* ---------- status model ---------- */
+const STATUS = {
+  novo:        { label: 'Novo',        tone: 'brand',   dot: true,  color: 'var(--juris-300)' },
+  contato:     { label: 'Em contato',  tone: 'info',    dot: false, color: 'var(--info)' },
+  qualificado: { label: 'Qualificado', tone: 'warn',    dot: false, color: 'var(--warn)' },
+  ganho:       { label: 'Ganho',       tone: 'ok',      dot: false, color: 'var(--ok)' },
+  perdido:     { label: 'Perdido',     tone: 'neutral', dot: false, color: 'var(--dim)' },
+};
+const PIPELINE = ['novo', 'contato', 'qualificado', 'ganho', 'perdido'];
+
+/* ---------- Supabase (mesmo que a landing usa) + integração real ---------- */
+const SUPABASE_URL = 'https://myyawepbfvxzjnlxcjql.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_fvDRMrZzyRiZWH9W32-RYw_P-9wXYWw';
+let supabaseClient = null;
+if (window.supabase) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+function mapDbLead(row) {
+  // Mapeia campos da landing (e do schema public.leads) para o modelo da UI
+  const created = row.created_at || row.enviado_em || row.received_at || new Date().toISOString();
+  const src = row.source || (row.pagina ? 'Landing Page DET' : 'Landing DET');
+  return {
+    id: row.id,
+    name: row.nome || 'Lead sem nome',
+    office: row.escritorio || '',
+    email: row.email || '',
+    phone: row.whatsapp || '',
+    cnpjs: row.quantidade_cnpjs || '',
+    message: row.interesse || row.message || '',
+    consent: row.consentimento !== false,
+    source: src,
+    createdAt: created,
+    status: row.status || 'novo',
+    // keep raw for updates
+    _raw: row,
+  };
+}
+
+/* ---------- seed leads (fallback quando Supabase não responde) ---------- */
+const SEED = [
+  { id: 'l1', name: 'Dra. Helena Vasconcelos', office: 'Vasconcelos & Prado Advogados', email: 'helena@vpadv.com.br', phone: '+5511998840102', cnpjs: '16 a 30 CNPJs', message: 'Atendo um grupo industrial com 22 CNPJs e perdi um prazo importante mês passado. Quero entender como funciona o monitoramento e o modelo de comissão.', consent: true, source: 'Landing — CTA Hero', createdAt: '2026-06-24T08:12:00', status: 'novo' },
+  { id: 'l2', name: 'Dr. Rafael Monteiro', office: 'Monteiro Advocacia Trabalhista', email: 'rafael.monteiro@monteiroadv.com.br', phone: '+5521987651234', cnpjs: '6 a 15 CNPJs', message: '', consent: true, source: 'Landing — Calculadora de comissão', createdAt: '2026-06-24T07:40:00', status: 'novo' },
+  { id: 'l3', name: 'Dra. Camila Ferreira', office: 'Ferreira & Associados', email: 'camila@ferreiraassoc.adv.br', phone: '+5531991230045', cnpjs: 'Mais de 50 CNPJs', message: 'Somos um escritório com carteira grande. Preciso de uma demonstração para a sócia antes de decidir.', consent: true, source: 'Landing — CTA Final', createdAt: '2026-06-23T16:22:00', status: 'contato' },
+  { id: 'l4', name: 'Dr. Bruno Tavares', office: 'Tavares Sociedade de Advogados', email: 'bruno@tavares.adv.br', phone: '+5547999012233', cnpjs: '31 a 50 CNPJs', message: 'Quero apresentar para meus clientes como serviço adicional. Como fica o faturamento?', consent: true, source: 'Landing — CTA Hero', createdAt: '2026-06-23T11:05:00', status: 'qualificado' },
+  { id: 'l5', name: 'Dra. Patrícia Lemos', office: 'Lemos Advocacia Empresarial', email: 'patricia@lemosadv.com.br', phone: '+5511970558821', cnpjs: '1 a 5 CNPJs', message: 'Começando agora, tenho poucos clientes mas quero oferecer o diferencial.', consent: true, source: 'Landing — FAQ', createdAt: '2026-06-22T14:48:00', status: 'ganho' },
+  { id: 'l6', name: 'Dr. Eduardo Nunes', office: 'Nunes & Cia', email: 'eduardo@nunesecia.adv.br', phone: '+5585988774411', cnpjs: '6 a 15 CNPJs', message: '', consent: true, source: 'Landing — CTA Hero', createdAt: '2026-06-21T09:30:00', status: 'perdido' },
+];
+
+const STORE = 'juris8_leads_v1';
+const initials = (n) => n.replace(/^(Dr|Dra)\.?\s+/i, '').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+const fmtDate = (iso) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) + ' · ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+};
+const rel = (iso) => {
+  const mins = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (mins < 1) return 'agora';
+  if (mins < 60) return mins + 'min';
+  const h = Math.round(mins / 60);
+  if (h < 24) return h + 'h';
+  const dd = Math.round(h / 24);
+  return dd + 'd';
+};
+
+/* ---------- left rail ---------- */
+const NAV = [
+  { id: 'leads', icon: 'user', label: 'Leads' },
+  { id: 'monitoramento', icon: 'bell', label: 'Monitoramento' },
+  { id: 'cnpjs', icon: 'cnpj', label: 'CNPJs' },
+];
+function Rail({ leadCount }) {
+  return (
+    <aside style={{ width: 224, flexShrink: 0, height: '100%', background: 'var(--surface-1)', borderRight: '1px solid var(--hairline)', display: 'flex', flexDirection: 'column', padding: '18px 12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '4px 8px 18px' }}>
+        <img src="../../assets/logo.png" alt="Juris 8" style={{ height: 28, width: 'auto' }} />
+      </div>
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {NAV.map((item) => {
+          const on = item.id === 'leads';
+          return (
+            <div key={item.id} style={{
+              display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', borderRadius: 'var(--r-3)',
+              cursor: on ? 'default' : 'pointer',
+              border: `1px solid ${on ? 'rgba(124,58,237,0.30)' : 'transparent'}`,
+              background: on ? 'var(--fill-brand-strong)' : 'transparent',
+              color: on ? 'var(--juris-200)' : 'var(--ink-400)',
+              fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: on ? 500 : 400,
+            }}>
+              <Icon n={item.icon} s={16} sw={1.8} />
+              <span>{item.label}</span>
+              {item.id === 'leads' && leadCount > 0 && (
+                <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, color: 'var(--juris-100)', background: 'var(--grad-brand)', borderRadius: 'var(--r-full)', minWidth: 18, height: 18, padding: '0 5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{leadCount}</span>
+              )}
+            </div>
+          );
+        })}
+      </nav>
+      <div style={{ marginTop: 'auto', padding: '12px 8px 0', borderTop: '1px solid var(--hairline)', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ width: 30, height: 30, borderRadius: 'var(--r-3)', flexShrink: 0, background: 'var(--grad-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, color: '#fff' }}>MS</span>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 12, color: 'var(--text)', fontWeight: 500 }}>Dr. Marcos Silva</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Comercial</div>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ---------- copy-to-clipboard button ---------- */
+function CopyBtn({ value, title }) {
+  const [done, setDone] = useState(false);
+  return (
+    <button title={title || 'Copiar'} onClick={() => {
+      navigator.clipboard && navigator.clipboard.writeText(value);
+      setDone(true); setTimeout(() => setDone(false), 1200);
+    }} style={{
+      width: 30, height: 30, flexShrink: 0, borderRadius: 'var(--r-2)', cursor: 'pointer',
+      background: 'var(--surface-2)', border: '1px solid var(--hairline-strong)',
+      color: done ? 'var(--ok)' : 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      transition: 'color 0.15s',
+    }}>
+      <Icon n={done ? 'check' : 'copy'} s={13} sw={2} />
+    </button>
+  );
+}
+
+/* ---------- contact row in detail ---------- */
+function ContactRow({ icon, label, value, href, copy }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '11px 0', borderBottom: '1px solid var(--hairline)' }}>
+      <span style={{ width: 30, height: 30, flexShrink: 0, borderRadius: 'var(--r-2)', background: 'var(--surface-2)', border: '1px solid var(--hairline)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
+        <Icon n={icon} s={14} />
+      </span>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--dim)' }}>{label}</div>
+        {href
+          ? <a href={href} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: 'var(--ink-100)', textDecoration: 'none' }}>{value}</a>
+          : <div style={{ fontSize: 13, color: 'var(--ink-100)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</div>}
+      </div>
+      {copy && <CopyBtn value={value} />}
+    </div>
+  );
+}
+
+/* ---------- detail panel ---------- */
+function Detail({ lead, onStatus, note, onNote }) {
+  if (!lead) {
+    return (
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, color: 'var(--dim)' }}>
+        <Icon n="inbox" s={30} sw={1.4} />
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Selecione um lead</span>
+      </div>
+    );
+  }
+  const st = STATUS[lead.status];
+  const waNum = lead.phone.replace(/[^\d]/g, '');
+  const phoneFmt = lead.phone.replace(/^\+55(\d{2})(\d{4,5})(\d{4})$/, '+55 ($1) $2-$3');
+  const waText = encodeURIComponent(`Olá ${lead.name.split(' ').slice(0,2).join(' ')}, aqui é da Juris8 DET Monitor. Recebemos seu contato pelo site e gostaríamos de apresentar a ferramenta.`);
+
+  return (
+    <div style={{ width: 410, flexShrink: 0, height: '100%', borderLeft: '1px solid var(--hairline)', background: 'var(--surface-1)', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ overflowY: 'auto', flex: 1, padding: '24px 24px 0' }}>
+        {/* header */}
+        <div style={{ display: 'flex', gap: 13, alignItems: 'center', marginBottom: 18 }}>
+          <span style={{ width: 46, height: 46, flexShrink: 0, borderRadius: 'var(--r-3)', background: 'var(--grad-brand)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: '#fff' }}>{initials(lead.name)}</span>
+          <div style={{ minWidth: 0 }}>
+            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.01em' }}>{lead.name}</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--ink-400)', fontSize: 12.5, marginTop: 2 }}>
+              <Icon n="building" s={12} sw={1.7} c="var(--dim)" />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.office}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* primary actions */}
+        <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+          <a href={`https://wa.me/${waNum}?text=${waText}`} target="_blank" rel="noreferrer" style={{ flex: 1, textDecoration: 'none' }}>
+            <Button variant="primary" size="sm" iconLeft={<Icon n="whatsapp" s={15} sw={1.7} />} style={{ width: '100%' }}>WhatsApp</Button>
+          </a>
+          <a href={`mailto:${lead.email}`} style={{ textDecoration: 'none' }}>
+            <Button variant="secondary" size="sm" iconLeft={<Icon n="mail" s={14} />}>E-mail</Button>
+          </a>
+        </div>
+
+        {/* status pipeline */}
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--dim)', marginBottom: 9 }}>Status do lead</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 22 }}>
+          {PIPELINE.map((k) => {
+            const on = lead.status === k;
+            return (
+              <button key={k} onClick={() => onStatus(lead.id, k)} style={{
+                fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+                padding: '6px 11px', borderRadius: 'var(--r-full)', cursor: 'pointer',
+                border: `1px solid ${on ? STATUS[k].color : 'var(--hairline-strong)'}`,
+                background: on ? 'var(--fill-brand)' : 'transparent',
+                color: on ? STATUS[k].color : 'var(--muted)',
+                transition: 'all 0.15s',
+              }}>{STATUS[k].label}</button>
+            );
+          })}
+        </div>
+
+        {/* contact details */}
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--dim)', marginBottom: 4 }}>Contato</div>
+        <ContactRow icon="mail" label="E-mail profissional" value={lead.email} href={`mailto:${lead.email}`} copy />
+        <ContactRow icon="phone" label="Telefone / WhatsApp" value={phoneFmt} copy />
+        <ContactRow icon="cnpj" label="CNPJs a monitorar" value={lead.cnpjs} />
+        <ContactRow icon="source" label="Origem" value={lead.source} />
+        <ContactRow icon="clock" label="Recebido em" value={fmtDate(lead.createdAt)} />
+
+        {/* message */}
+        {lead.message && (
+          <div style={{ marginTop: 18 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--dim)', marginBottom: 7 }}>Mensagem</div>
+            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.55, color: 'var(--ink-200)', background: 'var(--surface-2)', border: '1px solid var(--hairline)', borderRadius: 'var(--r-3)', padding: '13px 15px' }}>{lead.message}</p>
+          </div>
+        )}
+
+        {/* LGPD */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 16, color: 'var(--ok)' }}>
+          <Icon n="shield" s={14} sw={1.8} />
+          <span style={{ fontSize: 11.5, color: 'var(--ink-400)' }}>Consentimento LGPD registrado no envio do formulário.</span>
+        </div>
+
+        {/* internal note */}
+        <div style={{ marginTop: 20, paddingBottom: 24 }}>
+          <Input id={`note-${lead.id}`} label="Anotação interna" textarea rows={3}
+            placeholder="Registre o resultado do contato…"
+            value={note} onChange={(e) => onNote(lead.id, e.target.value)} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- list row ---------- */
+function Row({ lead, active, onClick }) {
+  const st = STATUS[lead.status];
+  return (
+    <button onClick={onClick} style={{
+      display: 'grid', gridTemplateColumns: '38px 1fr auto', gap: 12, alignItems: 'center', width: '100%', textAlign: 'left',
+      padding: '13px 16px', cursor: 'pointer', borderRadius: 'var(--r-3)',
+      border: `1px solid ${active ? 'var(--border-brand)' : 'transparent'}`,
+      background: active ? 'var(--fill-brand)' : 'transparent',
+      transition: 'background 0.12s',
+    }}
+      onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = 'var(--surface-2)'; }}
+      onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; }}>
+      <span style={{ width: 38, height: 38, borderRadius: 'var(--r-3)', flexShrink: 0, background: lead.status === 'novo' ? 'var(--grad-brand)' : 'var(--surface-3)', border: lead.status === 'novo' ? 'none' : '1px solid var(--hairline-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: lead.status === 'novo' ? '#fff' : 'var(--ink-300)' }}>{initials(lead.name)}</span>
+      <span style={{ minWidth: 0 }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+          {lead.status === 'novo' && <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--juris-400)', flexShrink: 0 }}></span>}
+          <span style={{ fontSize: 13.5, fontWeight: lead.status === 'novo' ? 600 : 500, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{lead.name}</span>
+        </span>
+        <span style={{ display: 'block', fontSize: 12, color: 'var(--ink-400)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{lead.office} · {lead.cnpjs}</span>
+      </span>
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5 }}>
+        <Badge tone={st.tone} dot={st.dot}>{st.label}</Badge>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--dim)' }}>{rel(lead.createdAt)}</span>
+      </span>
+    </button>
+  );
+}
+
+/* ---------- app ---------- */
+function App() {
+  const [leads, setLeads] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORE) || 'null');
+      if (saved && saved.leads) return saved.leads;
+    } catch (e) {}
+    return SEED;
+  });
+  const [notes, setNotes] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORE) || '{}').notes || {}; } catch (e) { return {}; }
+  });
+  const [filter, setFilter] = useState('todos');
+  const [query, setQuery] = useState('');
+  const [selId, setSelId] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORE) || '{}').selId || SEED[0].id; } catch (e) { return SEED[0].id; }
+  });
+  const [loading, setLoading] = useState(false);
+  const [isLive, setIsLive] = useState(false); // true quando veio do Supabase
+
+  // Carrega leads reais do Supabase (integração com a landing)
+  const loadFromSupabase = async (mergeLocal = true) => {
+    if (!supabaseClient) return false;
+    setLoading(true);
+    try {
+      const { data, error } = await supabaseClient
+        .from('leads')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        const mapped = data.map(mapDbLead);
+
+        // mescla com overrides locais (status/notas) sem perder o que o usuário mudou na demo
+        setLeads((current) => {
+          const byId = new Map(current.map(l => [l.id, l]));
+          const next = mapped.map(m => {
+            const prev = byId.get(m.id);
+            return prev ? { ...m, status: prev.status, /* keep local note via separate state */ } : m;
+          });
+          // inclui leads locais que ainda não estão no DB (ex: testes)
+          const dbIds = new Set(mapped.map(m => m.id));
+          const extras = current.filter(l => !dbIds.has(l.id));
+          return [...next, ...extras];
+        });
+        setIsLive(true);
+        return true;
+      }
+    } catch (e) {
+      console.warn('[Leads] Falha ao buscar Supabase, usando fallback local.', e);
+      setIsLive(false);
+    } finally {
+      setLoading(false);
+    }
+    return false;
+  };
+
+  // Carregar dados reais na montagem + mesclar com localStorage
+  useEffect(() => {
+    // tenta carregar do Supabase; se falhar mantém SEED + localStorage
+    loadFromSupabase();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STORE, JSON.stringify({ leads, notes, selId }));
+  }, [leads, notes, selId]);
+
+  const setStatus = (id, status) => {
+    setLeads((ls) => ls.map((l) => l.id === id ? { ...l, status } : l));
+    // Opcional: tentar persistir no Supabase (se a policy permitir UPDATE)
+    if (supabaseClient) {
+      supabaseClient.from('leads').update({ status, updated_at: new Date().toISOString() }).eq('id', id).then(({ error }) => {
+        if (error) console.log('Status não persistido no DB (pode precisar de policy UPDATE):', error.message);
+      });
+    }
+  };
+
+  const setNote = (id, v) => {
+    setNotes((n) => ({ ...n, [id]: v }));
+    if (supabaseClient) {
+      supabaseClient.from('leads').update({ notes: v, updated_at: new Date().toISOString() }).eq('id', id).then(() => {});
+    }
+  };
+
+  const refreshLeads = () => loadFromSupabase();
+
+  // Inserir lead de teste diretamente (útil para validar integração sem preencher o form da LP)
+  const insertTestLead = async () => {
+    if (!supabaseClient) {
+      alert('Supabase não inicializado — adicionando apenas localmente.');
+      const fake = {
+        id: 'local-' + Date.now(),
+        name: 'Dr. Teste ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+        office: 'Escritório Teste & Associados',
+        email: 'teste@exemplo.com.br',
+        phone: '+5511999990000',
+        cnpjs: '6 a 15 CNPJs',
+        message: 'Lead de teste gerado direto na interface de leads.',
+        consent: true,
+        source: 'Caixa de Leads — Inserção manual',
+        createdAt: new Date().toISOString(),
+        status: 'novo'
+      };
+      setLeads(ls => [fake, ...ls]);
+      setSelId(fake.id);
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const payload = {
+      nome: 'Dr. Teste ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      email: 'teste@exemplo.com.br',
+      whatsapp: '+5511999990000',
+      escritorio: 'Escritório de Teste Advogados',
+      quantidade_cnpjs: '6 a 15 CNPJs',
+      interesse: 'Lead de teste gerado direto na Caixa de Leads para validar a integração.',
+      consentimento: true,
+      pagina: 'lp-det',
+      source: 'Caixa de Leads — Inserção manual',
+      enviado_em: now,
+    };
+
+    try {
+      const { error } = await supabaseClient.from('leads').insert([payload]);
+      if (error) throw error;
+      await loadFromSupabase();
+    } catch (e) {
+      console.error('Erro ao inserir lead de teste:', e);
+      // Fallback local
+      const fake = mapDbLead({ ...payload, id: 'local-' + Date.now(), created_at: now, status: 'novo' });
+      setLeads(ls => [fake, ...ls]);
+      setSelId(fake.id);
+    }
+  };
+
+  const counts = useMemo(() => {
+    const c = { todos: leads.length };
+    PIPELINE.forEach((k) => c[k] = leads.filter((l) => l.status === k).length);
+    return c;
+  }, [leads]);
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return leads
+      .filter((l) => filter === 'todos' ? true : l.status === filter)
+      .filter((l) => !q || (l.name + ' ' + l.office + ' ' + l.email).toLowerCase().includes(q))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }, [leads, filter, query]);
+
+  const selected = leads.find((l) => l.id === selId) || null;
+
+  // Seleciona o primeiro lead quando a lista chega do Supabase e não temos seleção válida
+  useEffect(() => {
+    if (leads.length > 0 && !leads.find(l => l.id === selId)) {
+      setSelId(leads[0].id);
+    }
+  }, [leads, selId]);
+
+  const CHIPS = [
+    { k: 'todos', label: 'Todos' },
+    { k: 'novo', label: 'Novos' },
+    { k: 'contato', label: 'Em contato' },
+    { k: 'qualificado', label: 'Qualificados' },
+    { k: 'ganho', label: 'Ganhos' },
+    { k: 'perdido', label: 'Perdidos' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      <Rail leadCount={counts.novo} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {/* topbar */}
+        <header style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '0 24px', minHeight: 60, flexShrink: 0, borderBottom: '1px solid var(--hairline)', background: 'rgba(13,11,28,0.6)', backdropFilter: 'blur(12px)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--dim)' }}>Juris8</span>
+            <Icon n="chevR" s={12} c="var(--dim)" />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--ink-200)' }}>Caixa de Leads</span>
+            {isLive && (
+              <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', padding: '2px 8px', borderRadius: 999, background: 'rgba(74,222,128,0.15)', color: 'var(--ok)', border: '1px solid rgba(74,222,128,0.3)' }}>
+                ● ao vivo do Supabase
+              </span>
+            )}
+            {loading && <span style={{ fontSize: 10, color: 'var(--dim)' }}>carregando…</span>}
+          </div>
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', height: 36, borderRadius: 'var(--r-3)', width: 280, background: 'var(--surface-2)', border: '1px solid var(--hairline-strong)' }}>
+            <Icon n="search" s={14} c="var(--dim)" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar nome, escritório ou e-mail…"
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', color: 'var(--text)', fontSize: 12.5, fontFamily: 'var(--font-sans)' }} />
+          </div>
+          <div style={{ display: 'flex', gap: 6 }}>
+            <Button variant="ghost" size="sm" onClick={refreshLeads} style={{ fontSize: 12, padding: '0 10px' }}>Atualizar</Button>
+            <Button variant="secondary" size="sm" onClick={insertTestLead} style={{ fontSize: 12, padding: '0 10px' }}>+ Lead teste</Button>
+          </div>
+          <Badge tone="brand" dot>{counts.novo} novos</Badge>
+        </header>
+
+        {/* body: list + detail */}
+        <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+          {/* list column */}
+          <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+            {/* metrics */}
+            <div style={{ padding: '18px 24px 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(108px,1fr))', gap: 10 }}>
+              <Stat value={counts.novo} label="Novos leads" tone="brand" />
+              <Stat value={counts.contato} label="Em contato" />
+              <Stat value={counts.qualificado} label="Qualificados" tone="warn" />
+              <Stat value={counts.ganho} label="Ganhos" tone="ok" />
+            </div>
+
+            {/* filter chips — single scrollable row */}
+            <div className="chiprow" style={{ display: 'flex', gap: 7, padding: '16px 24px 12px', overflowX: 'auto' }}>
+              {CHIPS.map((c) => {
+                const on = filter === c.k;
+                return (
+                  <button key={c.k} onClick={() => setFilter(c.k)} style={{
+                    flexShrink: 0,
+                    fontFamily: 'var(--font-mono)', fontSize: 10.5, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+                    padding: '6px 12px', borderRadius: 'var(--r-full)', cursor: 'pointer',
+                    border: `1px solid ${on ? 'var(--border-brand)' : 'var(--hairline-strong)'}`,
+                    background: on ? 'var(--fill-brand-strong)' : 'transparent',
+                    color: on ? 'var(--juris-200)' : 'var(--muted)', transition: 'all 0.13s',
+                  }}>{c.label} <span style={{ opacity: 0.55, marginLeft: 1 }}>{counts[c.k] ?? 0}</span></button>
+                );
+              })}
+            </div>
+
+            {/* rows */}
+            <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: '0 14px 24px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {visible.length === 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 10, color: 'var(--dim)', padding: 40 }}>
+                  <Icon n="inbox" s={26} sw={1.4} />
+                  <span style={{ fontSize: 13 }}>Nenhum lead neste filtro.</span>
+                </div>
+              ) : visible.map((l) => (
+                <Row key={l.id} lead={l} active={l.id === selId} onClick={() => setSelId(l.id)} />
+              ))}
+            </div>
+          </div>
+
+          {/* detail */}
+          <Detail lead={selected} onStatus={setStatus} note={notes[selId] || ''} onNote={setNote} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

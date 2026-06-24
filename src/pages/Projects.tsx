@@ -10,7 +10,7 @@ import { projectsService } from '@/services/projects.service'
 import type { CreateProjectInput, ProjectStatus } from '@/types/project'
 import { FolderOpen, FolderPlus, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const emptyForm: CreateProjectInput = {
   name: '',
@@ -22,12 +22,25 @@ const emptyForm: CreateProjectInput = {
 
 export function Projects() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const initialSearch = searchParams.get('search') || ''
   const { setCurrentProject } = useProjectContext()
   const [projects, setProjects] = useState(() => projectsService.list())
+  const [search, setSearch] = useState(initialSearch)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<CreateProjectInput>(emptyForm)
 
-  const refresh = () => setProjects(projectsService.list())
+  const refresh = () => {
+    const list = projectsService.list()
+    setProjects(list)
+  }
+
+  const filteredProjects = search.trim()
+    ? projects.filter((p) =>
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.description.toLowerCase().includes(search.toLowerCase())
+      )
+    : projects
 
   const handlePickFolder = async () => {
     const path = await tauriBridge.pickFolder()
@@ -61,6 +74,15 @@ export function Projects() {
           </Button>
         }
       />
+
+      <div className="mb-4">
+        <Input
+          placeholder="Filtrar projetos..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-xs"
+        />
+      </div>
 
       {showForm && (
         <form onSubmit={handleSubmit} className="mb-8 rounded-xl border border-border bg-bg-panel p-5">
@@ -111,16 +133,26 @@ export function Projects() {
           action={<Button onClick={() => setShowForm(true)}><Plus className="h-4 w-4" /> Novo projeto</Button>}
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project) => (
-            <div key={project.id} onClick={() => handleOpenProject(project.id)}>
-              <ProjectCard
-                project={project}
-                toolCount={projectsService.getLinkedToolIds(project.id).length}
-              />
+        <>
+          {search && (
+            <div className="mb-3 text-xs text-text-muted">
+              Filtrando por: <span className="text-text-primary">"{search}"</span> — {filteredProjects.length} resultado(s)
             </div>
-          ))}
-        </div>
+          )}
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredProjects.map((project) => (
+              <div key={project.id} onClick={() => handleOpenProject(project.id)}>
+                <ProjectCard
+                  project={project}
+                  toolCount={projectsService.getLinkedToolIds(project.id).length}
+                />
+              </div>
+            ))}
+          </div>
+          {filteredProjects.length === 0 && projects.length > 0 && (
+            <p className="text-sm text-text-muted">Nenhum projeto corresponde à busca.</p>
+          )}
+        </>
       )}
     </div>
   )

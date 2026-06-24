@@ -14,6 +14,9 @@ The **real landing page** is checked into this project at **`site/index.html`** 
 - `logo.png` — the Juris8 logo used by the site.
 - `mockup9-embed/dist/` — the built certificate-config demo, embedded by the landing via `<iframe>`.
 
+**Lead integration**: The specialist form in `site/index.html` writes to Supabase `public.leads`.  
+See `ui_kits/det-monitor/leads.html` for the live "Caixa de Leads" inbox (pulls real submissions + source tracking).
+
 > The design-system tokens in `tokens/` are distilled FROM this site's `home-styles.css`. When the site changes, re-derive the tokens to keep them in sync.
 
 ## Sources
@@ -111,3 +114,22 @@ No Figma file or slide deck was provided.
 **`assets/`** — `logo.png`.
 
 **Design System tab groups:** Colors · Type · Spacing · Brand · Components · DET Monitor.
+
+## Quick Preview (Windows)
+
+From this folder (`juris8/`):
+
+```powershell
+.\start-preview.ps1
+```
+
+- Landing page (form sends to Supabase): http://localhost:8000/site/index.html
+- Integrated Leads inbox (Caixa de Leads): http://localhost:8000/ui_kits/det-monitor/leads.html
+
+Inside the Leads UI you will find an **"+ Lead teste"** button that instantly inserts a real lead via Supabase for fast testing.
+
+Or manually:
+```powershell
+cd C:\Users\lecto\Downloads\CAIOSs\caios-data\design-systems\juris8
+python -m http.server 8000
+```

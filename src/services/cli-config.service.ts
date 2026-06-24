@@ -13,7 +13,7 @@ const DEFAULT_CODEX_PATH_WIN =
 const DEFAULT_GROK_PATH_WIN = 'C:/Users/gcaio/.grok/bin/grok.exe'
 
 const DEFAULT_HERMES_PATH_WIN =
-  'C:/Users/gcaio/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe'
+  'C:/Users/lecto/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe'
 
 function defaultCliConfig(id: string, name: string, command: string): CliToolConfig {
   return {
