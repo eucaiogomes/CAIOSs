@@ -1,0 +1,18 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Logo" subtitle="j8 mark + JURIS 8 wordmark on dark" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 0; }
+  .wrap { display: grid; grid-template-columns: 1.3fr 1fr; min-height: 200px; }
+  .cell { display: flex; align-items: center; justify-content: center; padding: 28px; }
+  .dark { background: var(--surface-1); }
+  .light { background: #fff; }
+  img { height: 64px; width: auto; }
+  .tag { position: absolute; top: 12px; left: 16px; font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); }
+</style></head>
+<body>
+<div class="wrap">
+  <div class="cell dark" style="position:relative"><span class="tag">on dark surface</span><img src="../assets/logo.png" alt="Juris 8" /></div>
+  <div class="cell light" style="position:relative"><span class="tag" style="color:#807AA0">on white</span><img src="../assets/logo.png" alt="Juris 8" /></div>
+</div>
+</body></html>

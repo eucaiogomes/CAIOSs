@@ -1,0 +1,45 @@
+/* ============================================================
+   JURIS8 · TYPOGRAPHY TOKENS
+   Display: Geist (bold, geometric — no editorial serif)
+   Sans:    Geist (UI workhorse)
+   Mono:    Geist Mono (eyebrows, meta, kickers, data)
+============================================================ */
+:root {
+  /* Families — one clean sans family does display + UI. No serif. */
+  --font-display: 'Geist', system-ui, -apple-system, sans-serif;
+  --font-sans:    'Geist', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Weights (Geist) */
+  --fw-light:    300; /* @kind font */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+  --fw-display:  600; /* @kind font */
+
+  /* Fluid type scale — display headings use clamp() */
+  --fs-display:  clamp(34px, 4vw, 56px);   /* @kind font */
+  --fs-h2:       clamp(28px, 3.7vw, 46px); /* @kind font */
+  --fs-h3:       22px;  /* @kind font */
+  --fs-h4:       18px;  /* @kind font */
+  --fs-lg:       16px;  /* @kind font */
+  --fs-body:     15px;  /* @kind font */
+  --fs-sm:       13.5px; /* @kind font */
+  --fs-xs:       12px;  /* @kind font */
+  --fs-eyebrow:  11px;  /* @kind font */
+  --fs-micro:    9.5px; /* @kind font */
+
+  /* Line heights */
+  --lh-tight:   1.08; /* @kind font */
+  --lh-snug:    1.25; /* @kind font */
+  --lh-body:    1.55; /* @kind font */
+  --lh-relaxed: 1.7;  /* @kind font */
+
+  /* Letter spacing */
+  --ls-display: -0.03em;  /* @kind font */
+  --ls-heading: -0.02em;  /* @kind font */
+  --ls-body:    -0.005em; /* @kind font */
+  --ls-mono:    0.1em;    /* @kind font */
+  --ls-mono-wide: 0.14em; /* @kind font */
+}

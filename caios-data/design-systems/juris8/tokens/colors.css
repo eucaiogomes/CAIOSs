@@ -1,0 +1,81 @@
+/* ============================================================
+   JURIS8 · COLOR TOKENS
+   Dark-first palette. Violet brand (juris) + cool ink neutrals.
+   Base scales first, then semantic aliases.
+============================================================ */
+:root {
+  /* --- Brand: Juris violet --- */
+  --juris-50:  #F4EEFF;
+  --juris-100: #E6D9FF;
+  --juris-200: #CFB4FF;
+  --juris-300: #B388FB;
+  --juris-400: #9A63F0;
+  --juris-500: #7C3AED; /* primary */
+  --juris-600: #6324C9;
+  --juris-700: #4C1A9E;
+  --juris-800: #361074;
+  --juris-900: #200A4D;
+  --juris-950: #130530;
+
+  /* --- Neutrals: cool ink (violet-tinted grays) --- */
+  --ink-50:  #F6F4FB;
+  --ink-100: #ECE9F5;
+  --ink-200: #D5D1E6;
+  --ink-300: #ADA7C7;
+  --ink-400: #807AA0;
+  --ink-500: #5B557A;
+  --ink-600: #3F3A5C;
+  --ink-700: #2A2645;
+  --ink-800: #1A1730;
+  --ink-900: #110E22;
+  --ink-950: #07050F;
+
+  /* --- Status --- */
+  --ok:   #4ADE80;
+  --warn: #F5B454;
+  --bad:  #FB7185;
+  --info: #7DD3FC;
+
+  /* ==========================================================
+     SEMANTIC ALIASES — reference these in product UI
+  ========================================================== */
+
+  /* Backgrounds & surfaces (dark) */
+  --bg:        var(--ink-950);
+  --surface-1: #0D0B1C; /* card / panel base */
+  --surface-2: #14112A; /* raised: bars, inputs */
+  --surface-3: #1B1738; /* highest: popovers, nodes */
+
+  /* Hairlines / borders */
+  --hairline:        rgba(255,255,255,0.06);
+  --hairline-strong: rgba(255,255,255,0.11);
+  --border-brand:    rgba(124,58,237,0.30);
+
+  /* Text */
+  --text:  #EDEAF7; /* primary copy */
+  --muted: #9C95BD; /* secondary / labels */
+  --dim:   #6E6890; /* tertiary / mono meta */
+
+  /* Brand text-on-dark accents */
+  --text-accent: var(--juris-300);
+  --text-accent-soft: var(--juris-200);
+
+  /* Tinted fills (brand) */
+  --fill-brand-weak:   rgba(124,58,237,0.08);
+  --fill-brand:        rgba(124,58,237,0.12);
+  --fill-brand-strong: rgba(124,58,237,0.16);
+
+  /* Tinted fills (status) */
+  --fill-ok:   rgba(74,222,128,0.10);
+  --fill-warn: rgba(245,180,84,0.11);
+  --fill-bad:  rgba(251,113,133,0.11);
+  --fill-info: rgba(125,211,252,0.10);
+
+  --border-ok:   rgba(74,222,128,0.30);
+  --border-warn: rgba(245,180,84,0.36);
+  --border-bad:  rgba(251,113,133,0.38);
+  --border-info: rgba(125,211,252,0.28);
+
+  /* Selection */
+  --selection-bg: var(--juris-500);
+}

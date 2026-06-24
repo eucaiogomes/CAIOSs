@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Status" subtitle="ok · warn · bad · info — with tinted fills" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 22px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .chip { border-radius: var(--r-5); padding: 16px; border: 1px solid; display: flex; flex-direction: column; gap: 8px; }
+  .dot { width: 18px; height: 18px; border-radius: 50%; }
+  .nm { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .hx { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+</style></head>
+<body>
+<div class="row">
+  <div class="chip" style="background:var(--fill-ok);border-color:var(--border-ok)"><span class="dot" style="background:var(--ok)"></span><span class="nm" style="color:var(--ok)">ok</span><span class="hx">#4ADE80</span></div>
+  <div class="chip" style="background:var(--fill-warn);border-color:var(--border-warn)"><span class="dot" style="background:var(--warn)"></span><span class="nm" style="color:var(--warn)">warn</span><span class="hx">#F5B454</span></div>
+  <div class="chip" style="background:var(--fill-bad);border-color:var(--border-bad)"><span class="dot" style="background:var(--bad)"></span><span class="nm" style="color:var(--bad)">bad</span><span class="hx">#FB7185</span></div>
+  <div class="chip" style="background:var(--fill-info);border-color:var(--border-info)"><span class="dot" style="background:var(--info)"></span><span class="nm" style="color:var(--info)">info</span><span class="hx">#7DD3FC</span></div>
+</div>
+</body></html>

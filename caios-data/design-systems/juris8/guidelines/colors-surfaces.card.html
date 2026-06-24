@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" viewport="700x170" name="Surfaces & Hairlines" subtitle="Dark elevation layers + border tokens" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 22px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile { border-radius: var(--r-5); padding: 18px 16px; border: 1px solid var(--hairline-strong); display: flex; flex-direction: column; gap: 10px; min-height: 96px; }
+  .var { font-family: var(--font-mono); font-size: 10px; color: var(--text); }
+  .hx { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+  .line { height: 1px; width: 100%; margin-top: auto; }
+</style></head>
+<body>
+<div class="row">
+  <div class="tile" style="background:var(--bg)"><span class="var">--bg</span><span class="hx">ink-950 · page</span></div>
+  <div class="tile" style="background:var(--surface-1)"><span class="var">--surface-1</span><span class="hx">card / panel</span></div>
+  <div class="tile" style="background:var(--surface-2)"><span class="var">--surface-2</span><span class="hx">bars / inputs</span></div>
+  <div class="tile" style="background:var(--surface-3)"><span class="var">--surface-3</span><span class="hx">popovers / nodes</span></div>
+</div>
+<div class="row" style="margin-top:12px">
+  <div class="tile" style="background:var(--surface-1)"><span class="var">--hairline</span><span class="hx">subtle dividers</span><span class="line" style="background:var(--hairline)"></span></div>
+  <div class="tile" style="background:var(--surface-1)"><span class="var">--hairline-strong</span><span class="hx">card borders</span><span class="line" style="background:var(--hairline-strong)"></span></div>
+  <div class="tile" style="background:var(--surface-1)"><span class="var">--border-brand</span><span class="hx">violet accent</span><span class="line" style="background:var(--border-brand)"></span></div>
+  <div class="tile" style="background:var(--surface-1)"><span class="var">--text / --muted / --dim</span><span class="hx" style="color:var(--text)">primary</span><span class="hx" style="color:var(--muted)">muted</span><span class="hx" style="color:var(--dim)">dim</span></div>
+</div>
+</body></html>

@@ -1,0 +1,106 @@
+<!-- @dsCard group="Components" viewport="700x560" name="Core" subtitle="Buttons, badges, cards, forms, alerts & stats" -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/lucide@0.511.0/dist/umd/lucide.min.js"></script>
+<style>
+  body { background: var(--bg); margin: 0; padding: 28px; }
+  .grid { display: flex; flex-direction: column; gap: 24px; max-width: 760px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .lbl { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--dim); margin-bottom: 4px; }
+  .block { display: flex; flex-direction: column; }
+  .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ds-i { width: 14px; height: 14px; }
+</style>
+</head>
+<body class="juris-ambient">
+<div id="root" class="grid"></div>
+<script type="text/babel">
+const { Button, Badge, Card, Input, Select, Alert, Eyebrow, Stat } = window.Juris8DesignSystem_75d483;
+const I = ({ n, w = 14 }) => <i data-lucide={n} style={{ width: w, height: w }}></i>;
+
+function Demo() {
+  return (
+    <React.Fragment>
+      <div className="block">
+        <span className="lbl">Buttons</span>
+        <div className="row">
+          <Button variant="primary" iconRight={<I n="arrow-right" />}>Falar com especialista</Button>
+          <Button variant="secondary">Entrar</Button>
+          <Button variant="ghost">Cancelar</Button>
+          <Button variant="primary" size="sm">Salvar</Button>
+          <Button variant="primary" disabled>Indisponível</Button>
+        </div>
+      </div>
+
+      <div className="block">
+        <span className="lbl">Badges</span>
+        <div className="row">
+          <Badge tone="ok" dot>Monitorando</Badge>
+          <Badge tone="bad">Urgente</Badge>
+          <Badge tone="warn">Atenção</Badge>
+          <Badge tone="brand">1 vez</Badge>
+          <Badge tone="neutral">LGPD</Badge>
+          <Badge tone="info">12 CNPJs</Badge>
+        </div>
+      </div>
+
+      <div className="block">
+        <span className="lbl">Eyebrow + Card</span>
+        <Card style={{ padding: 22 }}>
+          <Eyebrow>Como funciona</Eyebrow>
+          <h3 style={{ marginTop: 10, fontSize: 18 }}>Monitore o DET dos seus clientes</h3>
+          <p style={{ fontSize: 13.5, color: 'var(--ink-400)', marginTop: 6 }}>Autorize o acesso, selecione os CNPJs e acompanhe as comunicações em um só lugar.</p>
+        </Card>
+      </div>
+
+      <div className="cols2">
+        <div className="block">
+          <span className="lbl">Form fields</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Input id="d-email" label="E-mail profissional" placeholder="voce@escritorio.com.br" />
+            <Select id="d-cnpjs" label="Quantos CNPJs?" options={[
+              { value: '', label: 'Selecione...' },
+              { value: '1-5', label: '1 a 5 CNPJs' },
+              { value: '6-15', label: '6 a 15 CNPJs' },
+            ]} />
+          </div>
+        </div>
+        <div className="block">
+          <span className="lbl">Stats</span>
+          <div className="cols2">
+            <Stat value="14" label="Monitorados" />
+            <Stat value="3" label="Alertas hoje" tone="bad" />
+          </div>
+        </div>
+      </div>
+
+      <div className="block">
+        <span className="lbl">DET Alerts</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Alert tone="urgent" icon={<I n="triangle-alert" />}
+            title="Construtech Ltda · CNPJ 12.345.678/0001-90"
+            description="Notificação de fiscalização · Prazo: 10 dias úteis"
+            time="08:14" tag="Urgente" action="Analisar" />
+          <Alert tone="ok" icon={<I n="check" />}
+            title="Logística Ágil ME · CNPJ 55.123.456/0001-33"
+            description="Comunicado informativo · Nenhuma ação necessária"
+            time="ontem" tag="Resolvido" />
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+setTimeout(() => window.lucide && window.lucide.createIcons(), 60);
+</script>
+</body>
+</html>

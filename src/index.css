@@ -1,0 +1,199 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-bg-main: #0f1117;
+  --color-bg-panel: #161922;
+  --color-bg-soft: #1e2230;
+  --color-text-primary: #f5f7fa;
+  --color-text-secondary: #aab1c5;
+  --color-text-muted: #6f778b;
+  --color-primary: #ff7a1a;
+  --color-primary-hover: #ff8f3d;
+  --color-blue: #2563eb;
+  --color-border: #2a2f3d;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+}
+
+:root {
+  --bg-main: #0f1117;
+  --bg-panel: #161922;
+  --bg-soft: #1e2230;
+  --text-primary: #f5f7fa;
+  --text-secondary: #aab1c5;
+  --text-muted: #6f778b;
+  --primary: #ff7a1a;
+  --primary-hover: #ff8f3d;
+  --blue: #2563eb;
+  --border: #2a2f3d;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-main);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.brain-mesh {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 45%, rgba(255, 122, 26, 0.06), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(37, 99, 235, 0.05), transparent 60%),
+    radial-gradient(ellipse 40% 35% at 85% 20%, rgba(167, 139, 250, 0.06), transparent 55%),
+    var(--bg-main);
+}
+
+.brain-mesh-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 122, 26, 0.03), transparent 65%);
+  animation: brain-pulse 6s ease-in-out infinite;
+}
+
+@keyframes brain-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.hermes-boot-glow {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(255, 122, 26, 0.12), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 70%, rgba(37, 99, 235, 0.08), transparent 60%);
+}
+
+.hermes-ring {
+  position: absolute;
+  inset: 50%;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 122, 26, 0.2);
+  animation: hermes-pulse 3s ease-out infinite;
+}
+
+.hermes-ring-1 {
+  width: 120px;
+  height: 120px;
+  animation-delay: 0s;
+}
+
+.hermes-ring-2 {
+  width: 160px;
+  height: 160px;
+  animation-delay: 0.6s;
+  opacity: 0.6;
+}
+
+.hermes-ring-3 {
+  width: 200px;
+  height: 200px;
+  animation-delay: 1.2s;
+  opacity: 0.35;
+}
+
+@keyframes hermes-pulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.08);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.08);
+    opacity: 0;
+  }
+}
+
+.hermes-frame-in {
+  animation: hermes-frame-in 0.45s ease-out both;
+}
+
+@keyframes hermes-frame-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hermes-chat-bg {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255, 122, 26, 0.06), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(37, 99, 235, 0.04), transparent 50%);
+}
+
+.hermes-stream-pulse {
+  animation: hermes-stream-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hermes-stream-pulse {
+  0%, 100% { border-color: rgba(42, 47, 61, 0.7); }
+  50% { border-color: rgba(255, 122, 26, 0.25); }
+}
+
+.hermes-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--primary);
+  opacity: 0.4;
+  animation: hermes-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.hermes-dot.animation-delay-150 {
+  animation-delay: 0.15s;
+}
+
+.hermes-dot.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+@keyframes hermes-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}

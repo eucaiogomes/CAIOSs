@@ -1,0 +1,9 @@
+{
+  "profile": "explorer",
+  "title": "Explorer — Módulo CaiOS",
+  "session_id": "50b1b5e3",
+  "stored_session_id": "20260623_231612_1b0324",
+  "dashboard": "http://127.0.0.1:9119/?profile=explorer",
+  "briefing": "C:\\Users\\gcaio\\caios\\caios-data\\explorer\\session-briefing.md",
+  "hermes_cli": "C:/Users/gcaio/AppData/Local/hermes/hermes-agent/venv/Scripts/hermes.exe -p explorer chat"
+}

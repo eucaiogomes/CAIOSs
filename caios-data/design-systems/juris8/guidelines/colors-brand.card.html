@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Brand · Juris Violet" subtitle="Primary scale 50–950 · 500 is the brand" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 20px; }
+  .scale { display: flex; gap: 0; border-radius: var(--r-4); overflow: hidden; border: 1px solid var(--hairline-strong); }
+  .sw { flex: 1; height: 92px; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px 9px; }
+  .sw .n { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.9); }
+  .sw .h { font-family: var(--font-mono); font-size: 8px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+  .sw.dark .n, .sw.dark .h { color: rgba(0,0,0,0.55); }
+</style></head>
+<body>
+<div class="scale" id="s"></div>
+<script>
+const steps = [['50','#F4EEFF',1],['100','#E6D9FF',1],['200','#CFB4FF',1],['300','#B388FB',1],['400','#9A63F0',0],['500','#7C3AED',0],['600','#6324C9',0],['700','#4C1A9E',0],['800','#361074',0],['900','#200A4D',0],['950','#130530',0]];
+document.getElementById('s').innerHTML = steps.map(([n,h,d]) =>
+  `<div class="sw ${d?'dark':''}" style="background:${h}"><span class="n">${n}</span><span class="h">${h}</span></div>`).join('');
+</script>
+</body></html>

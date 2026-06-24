@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Runtime / local data
+caios-data/logs/
+caios-data/movidesk-obsidian/.cookie
+caios-data/movidesk-obsidian/all resources movidesk/
+caios-data/movidesk-obsidian/.git/
+caios-data/open-design/portable/
+caios-data/open-design/repo/node_modules/
+caios-data/open-design/deploy/.env
+
+# Secrets
+.env
+**/.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.agent-reach-venv/
+venv/
+.venv/
+
+# Tool/runtime artifacts
+agent-tools/
+terminals/
+.mcp-agent/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Tauri build artifacts
+src-tauri/target/

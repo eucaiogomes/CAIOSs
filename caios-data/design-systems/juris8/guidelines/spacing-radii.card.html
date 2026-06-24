@@ -1,0 +1,19 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Radii" subtitle="--r-2 → --r-7 + full" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 24px; }
+  .row { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+  .item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .box { width: 76px; height: 76px; background: var(--fill-brand); border: 1px solid var(--border-brand); }
+  .nm { font-family: var(--font-mono); font-size: 10px; color: var(--text); }
+  .px { font-family: var(--font-mono); font-size: 9px; color: var(--dim); }
+</style></head>
+<body>
+<div class="row" id="r"></div>
+<script>
+const items = [['--r-2','4'],['--r-3','8'],['--r-4','12'],['--r-5','16'],['--r-6','20'],['--r-7','28'],['--r-full','999']];
+document.getElementById('r').innerHTML = items.map(([v,px]) =>
+  `<div class="item"><div class="box" style="border-radius:var(${v})"></div><span class="nm">${v}</span><span class="px">${px}px</span></div>`).join('');
+</script>
+</body></html>

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Brand" viewport="700x180" name="Gradients" subtitle="Button, brand, text & surface gradients" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 24px; }
+  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .item { display: flex; flex-direction: column; gap: 10px; }
+  .box { height: 80px; border-radius: var(--r-5); border: 1px solid var(--hairline-strong); display: flex; align-items: center; justify-content: center; }
+  .nm { font-family: var(--font-mono); font-size: 9.5px; color: var(--text); }
+  .gt { font-family: var(--font-sans); font-weight: 600; font-size: 22px; }
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><div class="box" style="background:var(--grad-btn)"></div><span class="nm">--grad-btn</span></div>
+  <div class="item"><div class="box" style="background:var(--grad-brand)"></div><span class="nm">--grad-brand</span></div>
+  <div class="item"><div class="box" style="background:var(--surface-1)"><span class="gt grad">Aa</span></div><span class="nm">--grad-text</span></div>
+  <div class="item"><div class="box" style="background:var(--grad-surface)"></div><span class="nm">--grad-surface</span></div>
+</div>
+</body></html>

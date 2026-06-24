@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Neutrals · Cool Ink" subtitle="Violet-tinted gray scale 50–950" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 20px; }
+  .scale { display: flex; gap: 0; border-radius: var(--r-4); overflow: hidden; border: 1px solid var(--hairline-strong); }
+  .sw { flex: 1; height: 92px; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px 9px; }
+  .sw .n { font-family: var(--font-mono); font-size: 9px; color: rgba(255,255,255,0.9); }
+  .sw .h { font-family: var(--font-mono); font-size: 8px; color: rgba(255,255,255,0.55); text-transform: uppercase; }
+  .sw.dark .n, .sw.dark .h { color: rgba(0,0,0,0.6); }
+</style></head>
+<body>
+<div class="scale" id="s"></div>
+<script>
+const steps = [['50','#F6F4FB',1],['100','#ECE9F5',1],['200','#D5D1E6',1],['300','#ADA7C7',1],['400','#807AA0',0],['500','#5B557A',0],['600','#3F3A5C',0],['700','#2A2645',0],['800','#1A1730',0],['900','#110E22',0],['950','#07050F',0]];
+document.getElementById('s').innerHTML = steps.map(([n,h,d]) =>
+  `<div class="sw ${d?'dark':''}" style="background:${h}"><span class="n">${n}</span><span class="h">${h}</span></div>`).join('');
+</script>
+</body></html>

@@ -1,0 +1,36 @@
+/* ============================================================
+   JURIS8 · SPACING, RADII & LAYOUT TOKENS
+============================================================ */
+:root {
+  /* Spacing scale (4px base) */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Section rhythm (fluid) */
+  --section-y:    clamp(64px, 7vw, 104px); /* @kind spacing */
+  --header-gap:   clamp(36px, 4.5vw, 56px); /* @kind spacing */
+
+  /* Border radii */
+  --r-2: 4px;
+  --r-3: 8px;
+  --r-4: 12px;
+  --r-5: 16px;
+  --r-6: 20px;
+  --r-7: 28px;
+  --r-full: 999px;
+
+  /* Layout */
+  --shell-max: 1400px;
+  --shell-pad: clamp(20px, 5vw, 72px);
+  --nav-h:     68px;
+}

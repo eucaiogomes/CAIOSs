@@ -1,0 +1,8 @@
+/* ============================================================
+   JURIS8 · FONTS
+   Geist + Geist Mono — served via Google Fonts.
+   No editorial serif: Geist (bold) carries display headings.
+   If self-hosting is required, drop .woff2 files and replace
+   this @import with @font-face rules.
+============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap');

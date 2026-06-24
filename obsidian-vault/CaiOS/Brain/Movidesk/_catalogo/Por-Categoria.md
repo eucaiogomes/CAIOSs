@@ -1,0 +1,10 @@
+---
+tags:
+  - caios/brain
+  - movidesk
+  - movidesk/Categoria
+atualizado: "23/06/2026 21:40"
+---
+
+# Por categoria
+

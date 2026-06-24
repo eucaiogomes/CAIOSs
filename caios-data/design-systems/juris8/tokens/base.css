@@ -1,0 +1,70 @@
+/* ============================================================
+   JURIS8 · BASE — resets, body, ambient background, shell
+============================================================ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+::selection { background: var(--selection-bg); color: #fff; }
+
+/* Ambient violet glow + faint grid — the signature Juris8 backdrop.
+   Apply by adding class "juris-ambient" to a full-bleed dark page. */
+.juris-ambient { position: relative; overflow-x: hidden; }
+.juris-ambient::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(900px 600px at 82% -8%, rgba(124,58,237,0.085), transparent 64%),
+    radial-gradient(700px 500px at -8% 35%, rgba(76,26,158,0.055), transparent 70%),
+    radial-gradient(800px 800px at 50% 110%, rgba(183,136,255,0.028), transparent 74%);
+}
+.juris-ambient::after {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 72px 72px; background-position: -1px -1px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 78%);
+          mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 78%);
+}
+.juris-ambient > * { position: relative; z-index: 1; }
+
+/* Centered content column */
+.shell {
+  position: relative; z-index: 1;
+  width: min(100%, var(--shell-max));
+  margin: 0 auto;
+  padding: 0 var(--shell-pad);
+}
+
+/* Headings default */
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-heading);
+  margin: 0;
+  color: var(--text);
+}
+p { margin: 0; color: var(--ink-200); }
+
+/* Accent word inside a heading — gradient violet */
+.grad {
+  background: var(--grad-text);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

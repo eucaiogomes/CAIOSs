@@ -1,0 +1,18 @@
+<!-- @dsCard group="Spacing" viewport="700x200" name="Spacing scale" subtitle="4px base · --space-1 → --space-24" -->
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8" /><link rel="stylesheet" href="../styles.css" />
+<style>
+  body { background: var(--bg); margin: 0; padding: 24px; }
+  .stack { display: flex; flex-direction: column; gap: 9px; }
+  .row { display: flex; align-items: center; gap: 14px; }
+  .bar { height: 14px; background: linear-gradient(90deg, var(--juris-500), var(--juris-400)); border-radius: 3px; }
+  .nm { font-family: var(--font-mono); font-size: 10px; color: var(--text); width: 96px; flex-shrink: 0; }
+</style></head>
+<body>
+<div class="stack" id="s"></div>
+<script>
+const items = [['--space-1',4],['--space-2',8],['--space-3',12],['--space-4',16],['--space-6',24],['--space-8',32],['--space-12',48],['--space-16',64],['--space-24',96]];
+document.getElementById('s').innerHTML = items.map(([v,px]) =>
+  `<div class="row"><span class="nm">${v}</span><span class="bar" style="width:${px}px"></span><span class="nm" style="width:auto;color:var(--dim)">${px}px</span></div>`).join('');
+</script>
+</body></html>

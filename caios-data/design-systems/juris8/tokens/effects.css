@@ -1,0 +1,37 @@
+/* ============================================================
+   JURIS8 · EFFECTS — gradients, shadows, glows, blur
+============================================================ */
+:root {
+  /* --- Gradients --- */
+  /* Brand button: subtle vertical violet */
+  --grad-btn: linear-gradient(180deg, #7849DE 0%, #5C2BBA 100%); /* @kind color */
+  /* Deep brand backdrop (avatars, headers) */
+  --grad-brand: linear-gradient(135deg, #241052 0%, #5528B8 54%, #8F6CE6 100%); /* @kind color */
+  /* Text gradient for accent words */
+  --grad-text: linear-gradient(135deg, #C4A0FF 0%, #7C3AED 60%, #B788FF 100%); /* @kind color */
+  /* Card surface sheen */
+  --grad-surface: linear-gradient(145deg, rgba(27,23,56,0.72), rgba(13,11,28,0.82)); /* @kind color */
+
+  /* --- Shadows --- */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:  0 12px 32px -18px rgba(0,0,0,0.8);
+  --shadow-lg:  0 34px 80px -40px rgba(0,0,0,0.85);
+  /* Card lift on dark */
+  --shadow-card: 0 24px 54px -42px rgba(124,58,237,0.55);
+  /* Brand glow ring */
+  --glow: 0 0 0 1px rgba(124,58,237,0.22), 0 18px 48px -28px rgba(124,58,237,0.34);
+  /* Inset top highlight for raised buttons */
+  --inset-hi: inset 0 1px 0 rgba(255,255,255,0.16);
+  /* Button drop */
+  --shadow-btn: inset 0 1px 0 rgba(255,255,255,0.16), 0 1px 2px rgba(0,0,0,0.4), 0 8px 18px -10px rgba(124,58,237,0.45);
+
+  /* --- Blur (glass) --- */
+  --blur-nav:   blur(24px) saturate(1.4); /* @kind other */
+  --blur-glass: blur(10px); /* @kind other */
+
+  /* --- Motion --- */
+  --ease-out:   cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --dur-fast:   0.15s; /* @kind other */
+  --dur-base:   0.25s; /* @kind other */
+  --dur-slow:   0.6s; /* @kind other */
+}
